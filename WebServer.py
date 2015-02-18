@@ -222,7 +222,17 @@ class MyHandler(BaseHTTPRequestHandler):
                     XML = Subtitle.getSubtitleJSON(PMSaddress, self.path + query, options)
                     self.sendResponse(XML, 'application/json', True)
                     return
-                
+                # serve "*.cer" - thumbnails for old-style mainpage
+if self.path.endswith(".cer"):
+dprint(__name__, 1, "serving *.cer: "+self.path)
+f = open(sys.path[0] + sep + "assets" + sep + "certificates" + self.path, "rb")
+self.send_response(200)
+self.send_header('Content-type', 'application/xml')
+self.end_headers()
+self.wfile.write(f.read())
+f.close()
+return
+
                 # get everything else from XMLConverter - formerly limited to trailing "/" and &PlexConnect Cmds
                 if True:
                     dprint(__name__, 1, "serving .xml: "+self.path)
